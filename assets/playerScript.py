@@ -36,7 +36,7 @@ class playerObject(arcade.Sprite):
         self.speed = 250
         self.dir = 0
 
-        self.PlayerState = "Patience"
+        self.PlayerState = "Determination"
 
         self.scale = 0.25
 

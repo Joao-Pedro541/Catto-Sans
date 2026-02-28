@@ -25,7 +25,7 @@ class WindowGame(arcade.Window):
         self.clear()
         self.camera.use()
 
-        for i in range(0,4):
+        for i in range(0,8):
             self.Bus.GetFunction("onDraw",i)
 
     def on_resize(self, width, height):

@@ -5,11 +5,12 @@ from GameSupportArcadePython.keysManage import keys
 from assets.playerScript import playerObject
 from assets.boxBattleScript import boxBattle
 from assets.CattoSansScript import cattoSans
+from assets.BallWoolAttack import BallAttack
 
 class ObjectsGame():
     def __init__(self,Bus: EventBus):
         self.Bus = Bus
-        self.Scenes = {"scene0":[[playerObject,320,140],[boxBattle,320,140,260,200],[cattoSans,320,350]]}
+        self.Scenes = {"scene0":[[playerObject,320,140],[boxBattle,320,140,260,200],[cattoSans,320,350],[BallAttack,320,140]]}
 
         self.GameObject = {}
         self.ManagersObjects = {"keys": keys(self.Bus)}
