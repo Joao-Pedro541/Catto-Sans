@@ -8,7 +8,7 @@ def main():
     events = EventBus()
     managerObjects = ObjectsGame(events)
 
-    window = WindowGame(events,width=640,height=480,title="GattoSans")
+    window = WindowGame(events,width=640,height=480,title="CattoSans")
     managerObjects.DefineScene("scene0")
     window.on_setup()
     arcade.run()

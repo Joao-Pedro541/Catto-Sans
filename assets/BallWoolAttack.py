@@ -30,18 +30,14 @@ class BallAttack(arcade.Sprite):
         heightWindow = self.Bus.GetVariable("heightWindow")
         cameraWindow = self.Bus.GetVariable("camera")
 
+        playerPos = self.Bus.GetVariable("playerPos")
+
         if widthWindow is not None and heightWindow is not None:
             if cameraWindow.position is not None:
                 cameraX, cameraY = cameraWindow.position
                 
-                if cameraX - widthWindow/2 > self.center_x or cameraX + widthWindow/2 < self.center_x:
-                    self.center_x -= MathGame.cos(MathGame.radians(self.dir)) * deadzone
-                    self.dir = 180 - (self.dir + random.randint(-15,15)) 
-                    self.points.append((self.center_x, self.center_y))
-
-                if cameraY - heightWindow/2 > self.center_y or cameraY + heightWindow/2 < self.center_y:
-                    self.center_y -= MathGame.sin(MathGame.radians(self.dir)) * deadzone
-                    self.dir = -self.dir + random.randint(-15,15)
+                if cameraX - widthWindow/2 > self.center_x or cameraX + widthWindow/2 < self.center_x or cameraY - heightWindow/2 > self.center_y or cameraY + heightWindow/2 < self.center_y:
+                    self.dir = int(MathGame.get_angle_degrees(self.center_x, self.center_y,*playerPos) + random.randint(-45,45))
                     self.points.append((self.center_x, self.center_y))
 
         self.dir = self.dir % 360
@@ -54,10 +50,8 @@ class BallAttack(arcade.Sprite):
         dt = self.Bus.GetVariable("deltatime") or 0
 
         self.center_x += MathGame.cos(MathGame.radians(self.dir)) * self.speed * dt
-        self.center_y += MathGame.sin(MathGame.radians(self.dir)) * self.speed * dt
+        self.center_y -= MathGame.sin(MathGame.radians(self.dir)) * self.speed * dt
 
-        
-    
     def onDraw(self,layer:int):
         dt = self.Bus.GetVariable("deltatime") or 0
         if layer == 4:
