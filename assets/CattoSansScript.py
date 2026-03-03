@@ -26,16 +26,12 @@ class cattoSans(arcade.SpriteList):
         self.append(self.pupilLeft)
         self.append(self.pupilRight)
         self.append(self.head)
-
-        self.Bus.SetFunction("onSetup", self.onSetup)
+        
         self.Bus.SetFunction("onUpdate", self.onUpdate)
         self.Bus.SetFunction("onDraw", self.onDraw)
 
         self.dirShake = 1 
 
-    def onSetup(self):
-        pass
-    
     def onUpdate(self):
         self.deltatime = self.Bus.GetVariable("deltatime") or 0
 
@@ -63,7 +59,7 @@ class cattoSans(arcade.SpriteList):
         self.torso.center_x += self.dirShake * (speed * self.deltatime)
         self.torso.center_y = self.posY - MathGame.sin((self.posX - self.torso.center_x) / frequency) * amplitude
 
-        self.head.center_x = MathGame.lerp(self.head.center_x, self.torso.center_x, (0.5 * speed) * self.deltatime)
+        self.head.center_x = MathGame.lerp(self.head.center_x, self.torso.center_x, (0.5 * speed) * self.deltatime) 
         self.head.center_y = MathGame.lerp(self.head.center_y, self.torso.center_y, (0.85 * speed) * self.deltatime)
 
 

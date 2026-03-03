@@ -14,12 +14,11 @@ class BallAttack(arcade.Sprite):
 
         self.Bus = Bus
 
-        self.Bus.SetFunction("onSetup", self.onSetup)
         self.Bus.SetFunction("onUpdate", self.onUpdate)
         self.Bus.SetFunction("onDraw", self.onDraw)
 
         self.dir = random.randint(0,360)
-        self.speed = 1000
+        self.speed = 800
 
         self.points = []
 
@@ -32,18 +31,14 @@ class BallAttack(arcade.Sprite):
 
         playerPos = self.Bus.GetVariable("playerPos")
 
-        if widthWindow is not None and heightWindow is not None:
-            if cameraWindow.position is not None:
+        if widthWindow is not None and heightWindow is not None and cameraWindow.position is not None and playerPos is not None:
                 cameraX, cameraY = cameraWindow.position
                 
                 if cameraX - widthWindow/2 > self.center_x or cameraX + widthWindow/2 < self.center_x or cameraY - heightWindow/2 > self.center_y or cameraY + heightWindow/2 < self.center_y:
-                    self.dir = int(MathGame.get_angle_degrees(self.center_x, self.center_y,*playerPos) + random.randint(-45,45))
+                    self.dir = int(MathGame.get_angle_degrees(self.center_x, self.center_y,*playerPos) + random.randint(-30,30))
                     self.points.append((self.center_x, self.center_y))
 
         self.dir = self.dir % 360
-
-    def onSetup(self):
-        return
     
     def onUpdate(self):
         self.limityWindow()

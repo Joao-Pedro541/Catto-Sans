@@ -52,6 +52,9 @@ class playerObject(arcade.Sprite):
                             "MoveHorizontal": {arcade.key.LEFT: -1, arcade.key.RIGHT: 1},
                             "MoveVertical": {arcade.key.UP: 1, arcade.key.DOWN: -1}
                 }
+        
+        self.directionX = 0
+        self.directionY = 0
 
     def InputMoviment(self):
         X = 0         
@@ -63,13 +66,13 @@ class playerObject(arcade.Sprite):
                     X += self.inputCommands["MoveHorizontal"].get(i, 0)
                     Y += self.inputCommands["MoveVertical"].get(i, 0)
 
-        return MathGame.normalized2D(X,Y)
+        return MathGame.lerp_2d((self.directionX,self.directionY), MathGame.normalized2D(X,Y), 0.8 * (self.deltatime * 17))
 
     def DeterminaionMoviment(self):  
-        directionX, directionY= self.InputMoviment() 
+        self.directionX, self.directionY= self.InputMoviment() 
 
-        return self.BoxLimity(self.center_x + (directionX * self.speed) * self.deltatime, 
-        self.center_y +  (directionY * self.speed) * self.deltatime)
+        return self.BoxLimity(self.center_x + (self.directionX * self.speed) * self.deltatime, 
+        self.center_y +  (self.directionY * self.speed) * self.deltatime)
 
     def PatienceMoviment(self):
          

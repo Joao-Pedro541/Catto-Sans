@@ -21,3 +21,9 @@ class EventBus():
 
     def GetVariable(self, nameVariable: str):
         return self.Variables.get(nameVariable)
+    
+    def DelObject(self, Object):
+        for nameFunction in self.Functions:
+            func = getattr(Object, nameFunction, None)
+            if func is not None and func in self.Functions[nameFunction]:
+                self.Functions[nameFunction] = [function for function in self.Functions[nameFunction] if function != func]

@@ -15,7 +15,6 @@ class WindowGame(arcade.Window):
     def on_setup(self):
         self.camera = arcade.Camera2D()
         self.camera.position = (320,240)
-        self.Bus.GetFunction("onSetup")
 
         self.Bus.SetVariable("heightWindow", self.height)
         self.Bus.SetVariable("widthWindow", self.width)
