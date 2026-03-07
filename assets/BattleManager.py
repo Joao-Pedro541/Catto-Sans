@@ -8,11 +8,17 @@ class ManagerBattle():
     def __init__(self, Bus: EventBus):
         self.Bus = Bus
 
-        self.Bus.SetFunction("onUpdate", self.onUpdate)
+        #self.Bus.SetFunction("onUpdate", self.onUpdate)
+        self.Bus.SetFunction("EndAttack", self.chooseAttack)
 
-        self.Attacks = [[10,BallAttack,300,300]]
-        self.timeAttack = 5
+        self.Attacks = [[BallAttack,300,300]]
         self.attack = None
+
+        self.chooseAttack()
+        
+
+    def EndAttack(self):
+        self.chooseAttack()
 
     def chooseAttack(self):
         if self.attack is not None:
@@ -20,12 +26,8 @@ class ManagerBattle():
             del self.attack
 
         attack = self.Attacks[random.randint(0,len(self.Attacks)-1)]
-        self.timeAttack = attack[0]
-        self.attack = attack[1](self.Bus, *attack[2:])
+        self.attack = attack[0](self.Bus, *attack[1:])
 
     
     def onUpdate(self):
-        if self.timeAttack > 0:
-            self.timeAttack -= self.Bus.GetVariable("deltatime") or 0
-        else:
-            self.chooseAttack()
+        return
