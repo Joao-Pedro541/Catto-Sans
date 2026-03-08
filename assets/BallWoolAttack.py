@@ -19,7 +19,7 @@ class BallAttack(arcade.Sprite):
 
         self.dir = random.randint(0,360)
 
-        self.speedAttack = 800
+        self.speedAttack = 300
         self.speedReturn = 1600
 
         self.points = []
@@ -42,7 +42,7 @@ class BallAttack(arcade.Sprite):
             PosBoxX, PosBoxY
             
             if PosBoxX - widthWindow/2 > self.center_x or PosBoxX + widthWindow/2 < self.center_x or PosBoxY - heightWindow/2 > self.center_y or PosBoxY + heightWindow/2 < self.center_y:
-                self.dir = int(MathGame.get_angle_degrees(self.center_x, self.center_y, *playerPos) + random.randint(-90, 90))
+                self.dir = MathGame.get_angle_degrees(self.center_x, self.center_y, *playerPos) + random.randint(-5,5)
                 self.points.append((MathGame.clamp(self.center_x, PosBoxX - widthWindow/2, PosBoxX + widthWindow/2), MathGame.clamp(self.center_y, PosBoxY - heightWindow/2, PosBoxY + heightWindow/2)))
 
         self.dir = self.dir % 360
@@ -50,7 +50,7 @@ class BallAttack(arcade.Sprite):
     def returnToPoints(self):
         if self.points:
             point = self.points[-1]
-            if MathGame.get_distance(self.center_x, self.center_y, *point) < 25:
+            if MathGame.get_distance(self.center_x, self.center_y, *point) < 30:
                 self.points.pop()
                 return
 
@@ -72,6 +72,8 @@ class BallAttack(arcade.Sprite):
 
         self.center_x += MathGame.cos(MathGame.radians(self.dir)) * self.speed * dt
         self.center_y -= MathGame.sin(MathGame.radians(self.dir)) * self.speed * dt
+
+        self.angle = -self.dir + (10 * dt)
         
     def onDraw(self,layer:int):
         dt = self.Bus.GetVariable("deltatime") or 0

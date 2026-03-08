@@ -11,7 +11,7 @@ class ManagerBattle():
         #self.Bus.SetFunction("onUpdate", self.onUpdate)
         self.Bus.SetFunction("EndAttack", self.chooseAttack)
 
-        self.Attacks = [[BallAttack,300,300]]
+        self.Attacks = [[BallAttack,300,150]]
         self.attack = None
 
         self.chooseAttack()

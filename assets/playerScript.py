@@ -33,7 +33,7 @@ class playerObject(arcade.Sprite):
             "Justice": self.JusticeMoviment
         }
         
-        self.speed = 250
+        self.speed = 175
         self.dir = 0
 
         self.PlayerState = "Determination"
@@ -49,8 +49,8 @@ class playerObject(arcade.Sprite):
         self.Bus.SetFunction("onDraw", self.onDraw)
 
         self.inputCommands = {
-                            "MoveHorizontal": {arcade.key.LEFT: -1, arcade.key.RIGHT: 1},
-                            "MoveVertical": {arcade.key.UP: 1, arcade.key.DOWN: -1}
+                            "MoveHorizontal": {arcade.key.LEFT: -1, arcade.key.RIGHT: 1, arcade.key.A: -1, arcade.key.D: 1},
+                            "MoveVertical": {arcade.key.UP: 1, arcade.key.DOWN: -1, arcade.key.W: 1, arcade.key.S: -1}
                 }
         
         self.directionX = 0
@@ -59,20 +59,21 @@ class playerObject(arcade.Sprite):
     def InputMoviment(self):
         X = 0         
         Y = 0 
-
+        
         for key,value in self.input.items():     
             if key is "keyPress": 
                 for i in value:           
-                    X += self.inputCommands["MoveHorizontal"].get(i, 0)
-                    Y += self.inputCommands["MoveVertical"].get(i, 0)
-
-        return MathGame.lerp_2d((self.directionX,self.directionY), MathGame.normalized2D(X,Y), 0.8 * (self.deltatime * 17))
+                    X = self.inputCommands["MoveHorizontal"].get(i, 0) or X
+                    Y = self.inputCommands["MoveVertical"].get(i, 0) or Y
+        
+        print(X,Y)
+        return X,Y
 
     def DeterminaionMoviment(self):  
-        self.directionX, self.directionY= self.InputMoviment() 
+        self.directionX, self.directionY= self.InputMoviment()
 
         return self.BoxLimity(self.center_x + (self.directionX * self.speed) * self.deltatime, 
-        self.center_y +  (self.directionY * self.speed) * self.deltatime)
+                                self.center_y + (self.directionY * self.speed) * self.deltatime)
 
     def PatienceMoviment(self):
          

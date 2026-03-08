@@ -32,10 +32,3 @@ def GetPointInCircleFlatten(degrees,radius,pointX,pointY,digit = 0):
     y = pointY - radius  * round(sin(radians(degrees)), digit)
     return x,y
 
-def PacManlimity(a,low = 0.0,high = 10.0, DeadNUmber = 0):
-    if  a > high:
-        a = low + DeadNUmber
-    if a < low:
-        a = high - DeadNUmber
-    return a
-
