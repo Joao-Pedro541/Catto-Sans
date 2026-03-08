@@ -19,12 +19,12 @@ class BallAttack(arcade.Sprite):
 
         self.dir = random.randint(0,360)
 
-        self.speedAttack = 300
+        self.speedAttack = 800
         self.speedReturn = 1600
 
         self.points = []
 
-        self.lineColor = arcade.color.WHITE
+        self.lineColor = arcade.color.GRAY_ASPARAGUS
 
         self.timeAttack = 10
 
@@ -42,7 +42,7 @@ class BallAttack(arcade.Sprite):
             PosBoxX, PosBoxY
             
             if PosBoxX - widthWindow/2 > self.center_x or PosBoxX + widthWindow/2 < self.center_x or PosBoxY - heightWindow/2 > self.center_y or PosBoxY + heightWindow/2 < self.center_y:
-                self.dir = MathGame.get_angle_degrees(self.center_x, self.center_y, *playerPos) + random.randint(-5,5)
+                self.dir = MathGame.get_angle_degrees(self.center_x, self.center_y, *playerPos) + random.randint(-75,75)
                 self.points.append((MathGame.clamp(self.center_x, PosBoxX - widthWindow/2, PosBoxX + widthWindow/2), MathGame.clamp(self.center_y, PosBoxY - heightWindow/2, PosBoxY + heightWindow/2)))
 
         self.dir = self.dir % 360
@@ -77,8 +77,9 @@ class BallAttack(arcade.Sprite):
         
     def onDraw(self,layer:int):
         dt = self.Bus.GetVariable("deltatime") or 0
-        if layer == 4:
+        if layer == 1:
             if self.points:
                 arcade.draw_line(self.center_x,self.center_y, *self.points[-1], self.lineColor, 2)
             arcade.draw_line_strip(self.points, self.lineColor, 2)
+        if layer == 4:
             arcade.draw_sprite(self)
