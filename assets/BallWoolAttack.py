@@ -19,7 +19,7 @@ class BallAttack(arcade.Sprite):
 
         self.dir = random.randint(0,360)
 
-        self.speedAttack = 800
+        self.speedAttack = 400
         self.speedReturn = 1600
 
         self.points = []
@@ -27,6 +27,7 @@ class BallAttack(arcade.Sprite):
         self.lineColor = arcade.color.GRAY_ASPARAGUS
 
         self.timeAttack = 10
+        self.spin = 0
 
         self.Bus.GetFunction("chanceBoxBattle",tam_x=400,tam_y=280)
 
@@ -73,7 +74,10 @@ class BallAttack(arcade.Sprite):
         self.center_x += MathGame.cos(MathGame.radians(self.dir)) * self.speed * dt
         self.center_y -= MathGame.sin(MathGame.radians(self.dir)) * self.speed * dt
 
-        self.angle = -self.dir + (10 * dt)
+        self.spin += 4500 * dt
+        self.spin = self.spin % 360
+
+        self.angle = self.dir + self.spin
         
     def onDraw(self,layer:int):
         dt = self.Bus.GetVariable("deltatime") or 0
