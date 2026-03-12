@@ -4,14 +4,18 @@ import GameSupportArcadePython.MathGame as MathGame
 from GameSupportArcadePython.eventBusScript import EventBus
 
     
-class playerObject(arcade.Sprite):
+class playerObject():
     def __init__(self, Bus: EventBus, posInitX=0, posInitY=0):
         super().__init__()
-        self.center_x = posInitX
-        self.center_y = posInitY
         
-        self.Bus = Bus
+        self.sprite = arcade.Sprite()
+        self.sprite.center_x = posInitX
+        self.sprite.center_y = posInitY
+        self.sprite.scale = 0.25
 
+
+
+        self.Bus = Bus
         self.projectileType = 1
         self.spritesPlayer = {
             "Determination": arcade.load_texture("assets/sprites/Player/Heart_Red.png"),
@@ -44,9 +48,9 @@ class playerObject(arcade.Sprite):
         self.input = {}
         self.deltatime = 0
 
-        self.Bus.SetFunction("onSetup", self.onSetup)
         self.Bus.SetFunction("onUpdate", self.onUpdate)
         self.Bus.SetFunction("onDraw", self.onDraw)
+        self.Bus.SetFunction("changePLayerLife", self.changePLayerLife)
 
         self.inputCommands = {
                             "MoveHorizontal": {arcade.key.LEFT: -1, arcade.key.RIGHT: 1, arcade.key.A: -1, arcade.key.D: 1},
@@ -55,6 +59,10 @@ class playerObject(arcade.Sprite):
         
         self.directionX = 0
         self.directionY = 0
+
+        self.life = 40
+        self.invicibilyTimeMax = 0.5
+        self.invicibilyTime = self.invicibilyTimeMax
 
     def InputMoviment(self):
         X = 0         
@@ -70,8 +78,8 @@ class playerObject(arcade.Sprite):
     def DeterminaionMoviment(self):  
         self.directionX, self.directionY= self.InputMoviment()
 
-        return self.BoxLimity(self.center_x + (self.directionX * self.speed) * self.deltatime, 
-                                self.center_y + (self.directionY * self.speed) * self.deltatime)
+        return self.BoxLimity(self.sprite.center_x + (self.directionX * self.speed) * self.deltatime, 
+                                self.sprite.center_y + (self.directionY * self.speed) * self.deltatime)
 
     def PatienceMoviment(self):
          
@@ -117,19 +125,27 @@ class playerObject(arcade.Sprite):
             posX = MathGame.clamp(posX, xBoxPos - widthBox/2 + deadzone, xBoxPos + widthBox/2 - deadzone)
             posY = MathGame.clamp(posY, yBoxPos - heightBox/2 + deadzone, yBoxPos + heightBox/2 - deadzone)
         return posX, posY
-
-    def onSetup(self):
-        self.texture = self.spritesPlayer["Determination"]
     
     def onUpdate(self):
         self.deltatime = self.Bus.GetVariable("deltatime") or 0
         self.input = self.Bus.GetVariable("inputKeys") or {}
 
-        self.center_x, self.center_y = self.playerMoviment[self.PlayerState]() if self.PlayerState in self.playerMoviment else (self.center_x, self.center_y)
+        self.sprite.center_x, self.sprite.center_y = self.playerMoviment[self.PlayerState]() if self.PlayerState in self.playerMoviment else (self.sprite.center_x, self.sprite.center_y)
 
-        self.Bus.SetVariable("playerPos", (self.center_x, self.center_y))
+        self.Bus.SetVariable("playerPos", (self.sprite.center_x, self.sprite.center_y))
+        self.Bus.SetVariable("playerSprite", self.sprite)
+        if self.invicibilyTime > 0:
+            self.invicibilyTime -= self.deltatime
+
 
     def onDraw(self,layer:int):
-        self.texture = self.spritesPlayer[self.PlayerState]
+        self.sprite.texture = self.spritesPlayer[self.PlayerState]
         if layer == 2:
-            arcade.draw_sprite(self)
+            arcade.draw_sprite(self.sprite)
+
+        arcade.draw_text(f"Life: {self.life}", 10, 400, arcade.color.WHITE, 14)
+
+    def changePLayerLife(self, amount):
+        if self.invicibilyTime <= 0:
+            self.life += amount
+            self.invicibilyTime = self.invicibilyTimeMax

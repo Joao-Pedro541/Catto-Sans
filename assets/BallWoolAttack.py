@@ -91,6 +91,11 @@ class BallAttack(arcade.Sprite):
         self.spin = self.spin % 360
 
         self.angle = self.dir + self.spin
+
+        playerHit = arcade.check_for_collision(self, self.Bus.GetVariable("playerSprite"))
+
+        if playerHit is True:
+            self.Bus.GetFunction("changePLayerLife", -1)
         
     def onDraw(self,layer:int):
         dt = self.Bus.GetVariable("deltatime") or 0
