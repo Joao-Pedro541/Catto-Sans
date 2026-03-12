@@ -65,8 +65,6 @@ class playerObject(arcade.Sprite):
                 for i in value:           
                     X = self.inputCommands["MoveHorizontal"].get(i, 0) or X
                     Y = self.inputCommands["MoveVertical"].get(i, 0) or Y
-        
-        print(X,Y)
         return X,Y
 
     def DeterminaionMoviment(self):  
