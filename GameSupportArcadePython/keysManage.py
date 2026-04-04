@@ -1,4 +1,5 @@
 from GameSupportArcadePython.eventBusScript import EventBus
+
 class keys():
     def __init__(self, Bus: EventBus):
         self.keys = {"keyUp":[], 

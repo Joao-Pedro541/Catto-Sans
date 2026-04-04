@@ -17,7 +17,7 @@ class BallAttack(arcade.Sprite):
         self.Bus.SetFunction("onUpdate", self.onUpdate)
         self.Bus.SetFunction("onDraw", self.onDraw)
 
-        self.dir = random.randint(0,360)
+        self.dir = random.randint(-45, 225)
 
         self.speedAttack = 800
         self.speedReturn = 1600
@@ -30,6 +30,8 @@ class BallAttack(arcade.Sprite):
         self.spin = 0
 
         self.Bus.GetFunction("chanceBoxBattle",tam_x=400,tam_y=280)
+        self.Bus.GetFunction("changeStage")
+        self.Bus.GetFunction("changeStage")
 
     def limityWindow(self, deadzone=10):
         widthWindow = self.Bus.GetVariable("widthBox") or 0
@@ -57,7 +59,6 @@ class BallAttack(arcade.Sprite):
                 self.dir = -self.dir
                 self.points.append((MathGame.clamp(self.center_x, minX, maxX), MathGame.clamp(self.center_y, minY, maxY)))
                 self.center_y = MathGame.clamp(self.center_y, minY + deadzone, maxY - deadzone)
-        self.dir %= 360
         
        
 
@@ -95,7 +96,7 @@ class BallAttack(arcade.Sprite):
         playerHit = arcade.check_for_collision(self, self.Bus.GetVariable("playerSprite"))
 
         if playerHit is True:
-            self.Bus.GetFunction("changePLayerLife", -1)
+            self.Bus.GetFunction("changePlayerLife", -1)
         
     def onDraw(self,layer:int):
         dt = self.Bus.GetVariable("deltatime") or 0

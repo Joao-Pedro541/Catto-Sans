@@ -20,6 +20,9 @@ class WindowGame(arcade.Window):
         self.Bus.SetVariable("widthWindow", self.width)
         self.Bus.SetVariable("camera", self.camera)
 
+        #link to music theme in loop: https://youtu.be/BCUelZaQwpk?si=ta2NLFYM-l3Z15FT
+        self.Bus.GetFunction("PlaySoundEffect","theme", volume=0.5, loop=True)
+
     def on_draw(self):
         self.clear()
         self.camera.use()
@@ -41,6 +44,9 @@ class WindowGame(arcade.Window):
     # define Key and Mouse events
     def on_key_press(self, key, modifiers):
         self.Bus.GetFunction("KeyPress",key,modifiers)
+
+        if key == arcade.key.SPACE:
+            self.set_fullscreen(not self.fullscreen)
 
     def on_key_release(self, key, modifiers):
         self.Bus.GetFunction("KeyRelease",key,modifiers)

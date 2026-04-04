@@ -9,6 +9,7 @@ class playerObject():
         super().__init__()
         
         self.sprite = arcade.Sprite()
+        self.centerMap = (posInitX,posInitY)
         self.sprite.center_x = posInitX
         self.sprite.center_y = posInitY
         self.sprite.scale = 0.25
@@ -28,7 +29,7 @@ class playerObject():
         }
         
         self.playerMoviment = {
-            "Determination": self.DeterminaionMoviment,
+            "Determination": self.DeterminationMoviment,
             "Patience": self.PatienceMoviment,
             "Bravery": self.BraveryMoviment,
             "Integrity": self.IntegrityMoviment,
@@ -36,13 +37,23 @@ class playerObject():
             "Kindness": self.KindnessMoviment,
             "Justice": self.JusticeMoviment
         }
+
+        self.ChangeStatePlayerMoviment = {
+            "Determination": self.DeterminationStart,
+            "Patience": self.PatienceStart,
+            "Bravery": self.BraveryStart,
+            "Integrity": self.IntegrityStart,
+            "Perseverance": self.PerseveranceStart,
+            "Kindness": self.KindnessStart,
+            "Justice": self.JusticeStart
+        }
+
+        self.PlayerState = "Bravery"
         
         self.speed = 175
         self.dir = 0
-
-        self.PlayerState = "Determination"
-
         self.scale = 0.25
+
 
         #System Variables
         self.input = {}
@@ -50,7 +61,8 @@ class playerObject():
 
         self.Bus.SetFunction("onUpdate", self.onUpdate)
         self.Bus.SetFunction("onDraw", self.onDraw)
-        self.Bus.SetFunction("changePLayerLife", self.changePLayerLife)
+        self.Bus.SetFunction("changePlayerLife", self.changePLayerLife)
+        self.Bus.SetFunction("changeStage", self.changeStages)
 
         self.inputCommands = {
                             "MoveHorizontal": {arcade.key.LEFT: -1, arcade.key.RIGHT: 1, arcade.key.A: -1, arcade.key.D: 1},
@@ -64,6 +76,8 @@ class playerObject():
         self.invicibilyTimeMax = 0.5
         self.invicibilyTime = self.invicibilyTimeMax
 
+        self.changeStages(self.PlayerState)
+
     def InputMoviment(self):
         X = 0         
         Y = 0 
@@ -74,46 +88,6 @@ class playerObject():
                     X = self.inputCommands["MoveHorizontal"].get(i, 0) or X
                     Y = self.inputCommands["MoveVertical"].get(i, 0) or Y
         return X,Y
-
-    def DeterminaionMoviment(self):  
-        self.directionX, self.directionY= self.InputMoviment()
-
-        return self.BoxLimity(self.sprite.center_x + (self.directionX * self.speed) * self.deltatime, 
-                                self.sprite.center_y + (self.directionY * self.speed) * self.deltatime)
-
-    def PatienceMoviment(self):
-         
-        if self.Bus is not None:
-            xBoxPos = self.Bus.GetVariable("xBoxPos") or self.center_x
-            yBoxPos = self.Bus.GetVariable("yBoxPos") or self.center_y
-
-            directionX, directionY = self.InputMoviment()
-
-            if directionX != 0 or directionY != 0:
-                xBoxPos = xBoxPos + (directionX * self.speed) *self.deltatime
-                yBoxPos = yBoxPos +  (directionY * self.speed) *self.deltatime
-            if self.Bus.GetVariable("widthBox") is not None and self.Bus.GetVariable("heightBox") is not None:
-
-                xBoxPos = MathGame.clamp(xBoxPos, self.center_x - self.Bus.GetVariable("widthBox")/2 + 10, self.center_x + self.Bus.GetVariable("widthBox")/2 - 10)
-                yBoxPos = MathGame.clamp(yBoxPos, self.center_y - self.Bus.GetVariable("heightBox")/2 + 10, self.center_y + self.Bus.GetVariable("heightBox")/2 - 10)
-
-            self.Bus.GetFunction("chanceBoxBattle", xBoxPos, yBoxPos, color = arcade.color.CYAN)
-        return (320,140)
-
-    def BraveryMoviment(self):
-        return (-1, 0)
-
-    def IntegrityMoviment(self):
-        return (0, -1)
-
-    def PerseveranceMoviment(self):
-        return (1, 1)
-
-    def KindnessMoviment(self):
-        return (-1, -1)
-
-    def JusticeMoviment(self):
-        return (1, -1)
     
     def BoxLimity(self, posX, posY, deadzone=10):
         xBoxPos = self.Bus.GetVariable("xBoxPos")
@@ -149,3 +123,106 @@ class playerObject():
         if self.invicibilyTime <= 0:
             self.life += amount
             self.invicibilyTime = self.invicibilyTimeMax
+
+    def changeStages(self,stage = "Determination"):
+        self.PlayerState = stage
+        self.ChangeStatePlayerMoviment[stage]()
+
+    def DeterminationMoviment(self):  
+        self.directionX, self.directionY= self.InputMoviment()
+
+        return self.BoxLimity(self.sprite.center_x + (self.directionX * self.speed) * self.deltatime, 
+                                self.sprite.center_y + (self.directionY * self.speed) * self.deltatime)
+
+    def PatienceMoviment(self):
+         
+        if self.Bus is not None:
+            xBoxPos = self.Bus.GetVariable("xBoxPos") or self.sprite.center_x
+            yBoxPos = self.Bus.GetVariable("yBoxPos") or self.sprite.center_y
+
+            directionX, directionY = self.InputMoviment()
+
+            if directionX != 0 or directionY != 0:
+                xBoxPos = xBoxPos + (directionX * self.speed) *self.deltatime
+                yBoxPos = yBoxPos +  (directionY * self.speed) *self.deltatime
+            if self.Bus.GetVariable("widthBox") is not None and self.Bus.GetVariable("heightBox") is not None:
+
+                xBoxPos = MathGame.clamp(xBoxPos, self.sprite.center_x - self.Bus.GetVariable("widthBox")/2 + 10, self.sprite.center_x + self.Bus.GetVariable("widthBox")/2 - 10)
+                yBoxPos = MathGame.clamp(yBoxPos, self.sprite.center_y - self.Bus.GetVariable("heightBox")/2 + 10, self.sprite.center_y + self.Bus.GetVariable("heightBox")/2 - 10)
+
+            self.Bus.GetFunction("chanceBoxBattle", xBoxPos, yBoxPos, color = arcade.color.CYAN)
+        return (320,140)
+
+    def BraveryMoviment(self):
+        for key,value in self.input.items():     
+            if key is "keyPress": 
+                for i in value:           
+                    self.directionX = self.inputCommands["MoveHorizontal"].get(i, 0) or self.directionX
+                    self.directionY = self.inputCommands["MoveVertical"].get(i, 0) or self.directionY
+        x = self.sprite.center_x + (self.directionX * self.speed) * self.deltatime
+        y = self.sprite.center_y + (self.directionY * self.speed) * self.deltatime
+
+
+
+        if self.Bus is not None:
+            xBoxPos = self.Bus.GetVariable("xBoxPos") or self.sprite.center_x
+            yBoxPos = self.Bus.GetVariable("yBoxPos") or self.sprite.center_y
+
+            if self.Bus.GetVariable("widthBox") is not None and self.Bus.GetVariable("heightBox") is not None:
+
+                if x < xBoxPos - self.Bus.GetVariable("widthBox")/2 + 5:
+                    x = xBoxPos + self.Bus.GetVariable("widthBox")/2 - 10
+                if x > xBoxPos + self.Bus.GetVariable("widthBox")/2 - 5:
+                    x = xBoxPos - self.Bus.GetVariable("widthBox")/2 + 10
+
+                if y < yBoxPos - self.Bus.GetVariable("heightBox")/2 + 5:
+                    y = yBoxPos + self.Bus.GetVariable("heightBox")/2 - 10
+                if y > yBoxPos + self.Bus.GetVariable("heightBox")/2 - 5:
+                    y = yBoxPos - self.Bus.GetVariable("heightBox")/2 + 10
+
+        return x,y
+        
+    def IntegrityMoviment(self):
+        return (0, -1)
+
+    def PerseveranceMoviment(self):
+        return (1, 1)
+
+    def KindnessMoviment(self):
+        return (-1, -1)
+
+    def JusticeMoviment(self):
+        return (0,-1)
+    
+    def DeterminationStart(self):
+        camera = self.Bus.GetVariable("camera")
+        if camera is not None:
+            self.sprite.center_x,self.sprite.center_y = self.centerMap
+
+    def PatienceStart(self):
+        camera = self.Bus.GetVariable("camera")
+        if camera is not None:
+            self.sprite.center_x,self.sprite.center_y = self.centerMap
+            
+        self.Bus.SetVariable("xBoxPos", self.sprite.center_x)
+        self.Bus.SetVariable("yBoxPos", self.sprite.center_y)
+
+    def BraveryStart(self):
+        self.sprite.center_x, self.sprite.center_y = self.centerMap
+        self.directionX,self.directionY = 1,1
+
+    def IntegrityStart(self):
+        # No specific start action, or reset position
+        pass
+
+    def PerseveranceStart(self):
+        # No specific start action
+        pass
+
+    def KindnessStart(self):
+        # No specific start action
+        pass
+
+    def JusticeStart(self):
+        # No specific start action
+        pass

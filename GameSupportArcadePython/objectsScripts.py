@@ -1,6 +1,7 @@
 
 from GameSupportArcadePython.eventBusScript import EventBus
 from GameSupportArcadePython.keysManage import keys
+from GameSupportArcadePython.SoundEffect import SoundManager
 
 from assets.playerScript import playerObject
 from assets.boxBattleScript import boxBattle
@@ -13,7 +14,8 @@ class ObjectsGame():
         self.Scenes = {"scene0":[[playerObject,320,140],[boxBattle,320,140,260,200],[cattoSans,320,350],[ManagerBattle]]}
 
         self.GameObject = {}
-        self.ManagersObjects = {"keys": keys(self.Bus)}
+        self.ManagersObjects = {"keys": keys(self.Bus),
+                                "sound": SoundManager(self.Bus)}
     
     def DefineScene(self,nameScene = "scene0"):
         self.GameObject = {}
