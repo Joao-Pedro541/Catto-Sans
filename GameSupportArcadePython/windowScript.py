@@ -21,7 +21,7 @@ class WindowGame(arcade.Window):
         self.Bus.SetVariable("camera", self.camera)
 
         #link to music theme in loop: https://youtu.be/BCUelZaQwpk?si=ta2NLFYM-l3Z15FT
-        self.Bus.GetFunction("PlaySoundEffect","theme", volume=0.5, loop=True)
+        self.Bus.GetFunction("PlaySoundEffect","theme", volume=0, loop=True)
 
     def on_draw(self):
         self.clear()
@@ -59,3 +59,5 @@ class WindowGame(arcade.Window):
 
     def on_mouse_release(self, x, y, button, modifiers):
         self.Bus.GetFunction("MouseRelease",x, y, button, modifiers)
+
+    

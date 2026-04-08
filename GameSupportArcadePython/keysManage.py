@@ -28,22 +28,25 @@ class keys():
 
 
     def onUpdate(self):
-        self.keys["keyUp"].clear()
-        self.keys["KeyDown"].clear()
-
-        self.keys["mouseUp"] = False
-        self.keys["mousePress"] = False
 
         self.Bus.SetVariable("mouseDirX", self.MouseXInWorld)
         self.Bus.SetVariable("mouseDirY", self.MouseYInWorld)
         self.Bus.SetVariable("inputKeys",self.keys)
 
+        self.keys["keyUp"].clear()
+        self.keys["KeyDown"].clear()
+        
+
+        self.keys["mouseUp"] = False
+        self.keys["mousePress"] = False
+
     def KeyPress(self,key,modifiers):
-        self.keys["keyUp"].append(key)
+        self.keys["KeyDown"].append(key)
+        
         self.keys["keyPress"].append(key)
 
     def KeyRelease(self,key,modifiers):
-        self.keys["KeyDown"].append(key)
+        self.keys["keyUp"].append(key)
 
         if key in self.keys["keyPress"]:
             self.keys["keyPress"].remove(key)
@@ -63,4 +66,3 @@ class keys():
     def onCamera(self,cam):
         self.MouseXInWorld = cam.position.x + (self.MouseXInScreen - cam.width / 2)
         self.MouseYInWorld = cam.position.y + (self.MouseYInScreen - cam.height / 2)
-            
