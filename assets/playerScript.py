@@ -79,13 +79,15 @@ class playerObject():
 
     def InputMoviment(self):
         X = 0         
-        Y = 0 
-        
-        for key,value in self.input.items():     
-            if key is "keyPress": 
-                for i in value:           
-                    X = self.inputCommands["MoveHorizontal"].get(i, 0) or X
-                    Y = self.inputCommands["MoveVertical"].get(i, 0) or Y
+        Y = 0       
+        if self.Bus.GetVariable("keyPress",arcade.key.LEFT) or self.Bus.GetVariable("keyPress",arcade.key.A):
+            X = -1
+        elif self.Bus.GetVariable("keyPress",arcade.key.RIGHT) or self.Bus.GetVariable("keyPress",arcade.key.D):
+            X = 1
+        if self.Bus.GetVariable("keyPress",arcade.key.UP) or self.Bus.GetVariable("keyPress",arcade.key.W):
+            Y = 1
+        elif self.Bus.GetVariable("keyPress",arcade.key.DOWN) or self.Bus.GetVariable("keyPress",arcade.key.S):
+            Y = -1
         return X,Y
     
     def BoxLimity(self, posX, posY, deadzone=10):

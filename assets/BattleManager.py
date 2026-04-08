@@ -31,6 +31,5 @@ class ManagerBattle():
         attack = self.Attacks[random.randint(0,len(self.Attacks)-1)]
         self.attack = attack[0](self.Bus, *attack[1:])
         
-
     def onUpdate(self):
         pass

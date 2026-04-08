@@ -19,8 +19,16 @@ class EventBus():
             for function in self.Functions[nameFunction]:
                 function(*attr,**kwargs)
 
-    def GetVariable(self, nameVariable: str):
-        return self.Variables.get(nameVariable)
+    def GetVariable(self, nameVariable: str, *args, **kwargs):
+        value = self.Variables.get(nameVariable)
+
+        if value is None:
+            return None  
+
+        if callable(value):
+            return value(*args, **kwargs) 
+
+        return value
     
     def DelObject(self, Object):
         for nameFunction in self.Functions:

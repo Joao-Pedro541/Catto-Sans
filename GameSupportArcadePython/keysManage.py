@@ -31,7 +31,10 @@ class keys():
 
         self.Bus.SetVariable("mouseDirX", self.MouseXInWorld)
         self.Bus.SetVariable("mouseDirY", self.MouseYInWorld)
-        self.Bus.SetVariable("inputKeys",self.keys)
+
+        self.Bus.SetVariable("KeyDown", self.GetKeyDown)
+        self.Bus.SetVariable("keyPress", self.GetKeyPress)
+        self.Bus.SetVariable("keyUp", self.GetKeyUp)
 
         self.keys["keyUp"].clear()
         self.keys["KeyDown"].clear()
@@ -40,6 +43,13 @@ class keys():
         self.keys["mouseUp"] = False
         self.keys["mousePress"] = False
 
+    def GetKeyPress(self,key):
+        return key in self.keys["keyPress"]
+    def GetKeyDown(self,key):
+        return key in self.keys["KeyDown"]
+    def GetKeyUp(self,key):
+        return key in self.keys["keyUp"]
+    
     def KeyPress(self,key,modifiers):
         self.keys["KeyDown"].append(key)
         
