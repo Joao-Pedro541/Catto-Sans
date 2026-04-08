@@ -11,7 +11,7 @@ class ManagerBattle():
         self.Bus.SetFunction("onUpdate", self.onUpdate)
         self.Bus.SetFunction("EndAttack", self.EndAttack)
 
-        self.Attacks = [[BallAttack,300,250]]
+        self.Attacks = [[BallAttack,300,600]]
         self.attack = None
 
         self.cooldownAttack = 0

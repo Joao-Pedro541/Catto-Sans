@@ -44,8 +44,8 @@ class cattoSans(arcade.SpriteList):
 
     def eyesControl(self,pointX = float,pointY = float):
 
-        self.pupilLeft.center_x,self.pupilLeft.center_y = MathGame.GetPointInCircleFlatten(MathGame.get_angle_degrees(self.head.center_x - 20,self.head.center_y + 80,pointX,pointY), 4, self.cornea.center_x, self.cornea.center_y,1)
-        self.pupilRight.center_x,self.pupilRight.center_y = MathGame.GetPointInCircleFlatten(MathGame.get_angle_degrees(self.head.center_x + 20,self.head.center_y + 80,pointX,pointY), 4, self.cornea.center_x, self.cornea.center_y,1)
+        self.pupilLeft.center_x,self.pupilLeft.center_y = MathGame.lerp_2d((self.pupilLeft.center_x,self.pupilLeft.center_y), MathGame.GetPointInCircleFlatten(MathGame.get_angle_degrees(self.head.center_x - 20,self.head.center_y + 80,pointX,pointY), 4, self.cornea.center_x, self.cornea.center_y,1), 0.1)
+        self.pupilRight.center_x,self.pupilRight.center_y = MathGame.lerp_2d((self.pupilRight.center_x,self.pupilRight.center_y), MathGame.GetPointInCircleFlatten(MathGame.get_angle_degrees(self.head.center_x + 20,self.head.center_y + 80,pointX,pointY), 4, self.cornea.center_x, self.cornea.center_y,1), 0.1)
 
     def shakeMov(self, speed: float, deadzone: float, amplitude: float, frequency: float):
 

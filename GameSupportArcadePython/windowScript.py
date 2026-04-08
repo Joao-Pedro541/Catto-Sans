@@ -34,7 +34,7 @@ class WindowGame(arcade.Window):
         return super().on_resize(width, height)
 
     def on_update(self, delta_time):
-        
+        self.camera.position = (320,240)
         self.Bus.GetFunction("onUpdate")
         self.Bus.SetVariable("deltatime", delta_time)
 

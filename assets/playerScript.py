@@ -14,7 +14,7 @@ class playerObject():
         self.sprite.center_y = posInitY
         self.sprite.scale = 0.25
 
-
+        self.blinkTime = 0
 
         self.Bus = Bus
         self.projectileType = 1
@@ -61,7 +61,7 @@ class playerObject():
 
         self.Bus.SetFunction("onUpdate", self.onUpdate)
         self.Bus.SetFunction("onDraw", self.onDraw)
-        self.Bus.SetFunction("changePlayerLife", self.changePLayerLife)
+        self.Bus.SetFunction("changePlayerLife", self.changePlayerLife)
         self.Bus.SetFunction("changeStage", self.changeStages)
 
         self.inputCommands = {
@@ -73,8 +73,7 @@ class playerObject():
         self.directionY = 0
 
         self.life = 40
-        self.invicibilyTimeMax = 0.5
-        self.invicibilyTime = self.invicibilyTimeMax
+        self.invicibilyTime = 0.5
 
         self.changeStages(self.PlayerState)
 
@@ -108,21 +107,28 @@ class playerObject():
 
         self.Bus.SetVariable("playerPos", (self.sprite.center_x, self.sprite.center_y))
         self.Bus.SetVariable("playerSprite", self.sprite)
-        if self.invicibilyTime > 0:
-            self.invicibilyTime -= self.deltatime
+
+        if self.invicibilyTime > 0: self.invicibilyTime -= self.deltatime
+
+        if self.blinkTime > 0: self.blinkTime -= self.deltatime
+        elif self.blinkTime < 0: self.blinkTime = 0
 
 
     def onDraw(self,layer:int):
         self.sprite.texture = self.spritesPlayer[self.PlayerState]
         if layer == 2:
+            self.sprite.alpha = MathGame.magnitude(((int(self.blinkTime * 10) % 2) -1 )* 255)
             arcade.draw_sprite(self.sprite)
 
         arcade.draw_text(f"Life: {self.life}", 10, 400, arcade.color.WHITE, 14)
 
-    def changePLayerLife(self, amount):
+    def changePlayerLife(self, amount, invicibilyTimeMax = 0.5):
+        
         if self.invicibilyTime <= 0:
+            self.blinkTime = invicibilyTimeMax
             self.life += amount
-            self.invicibilyTime = self.invicibilyTimeMax
+            self.invicibilyTime = invicibilyTimeMax
+            
 
     def changeStages(self,stage = "Determination"):
         self.PlayerState = stage

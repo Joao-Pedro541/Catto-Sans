@@ -17,14 +17,14 @@ class BallAttack(arcade.Sprite):
         self.Bus.SetFunction("onUpdate", self.onUpdate)
         self.Bus.SetFunction("onDraw", self.onDraw)
 
-        self.dir = random.randint(-45, 225)
+        self.dir = random.randint(45,135)
 
         self.speedAttack = 800
         self.speedReturn = 1600
 
         self.points = []
 
-        self.lineColor = arcade.color.GRAY_ASPARAGUS
+        self.lineColor = arcade.color.GRAY
 
         self.timeAttack = 10
         self.spin = 0
@@ -48,17 +48,19 @@ class BallAttack(arcade.Sprite):
 
         if widthWindow is not None and heightWindow is not None and PosBoxX is not None and playerPos is not None:
             PosBoxX, PosBoxY
+
+            lastPointX,lastPointY = MathGame.GetPointInCircle(self.dir,900,self.center_x,self.center_y)
             
-            if minX + deadzone > self.center_x or maxX - deadzone < self.center_x:
+            lastPointX,lastPointY = MathGame.clamp(lastPointX,minX,maxX), MathGame.clamp(lastPointY,minY,maxY)
+            
+            if deadzone >= MathGame.GetDist(self.center_x,lastPointX):
                 self.dir = 180 - self.dir
                 self.dir += random.randint(-5,5)
                 self.points.append((MathGame.clamp(self.center_x, minX, maxX), MathGame.clamp(self.center_y, minY, maxY)))
-                self.center_x = MathGame.clamp(self.center_x, minX + deadzone, maxX - deadzone)
 
-            if minY + deadzone > self.center_y or maxY - deadzone < self.center_y:
+            if deadzone >= MathGame.GetDist(self.center_y,lastPointY):
                 self.dir = -self.dir
                 self.points.append((MathGame.clamp(self.center_x, minX, maxX), MathGame.clamp(self.center_y, minY, maxY)))
-                self.center_y = MathGame.clamp(self.center_y, minY + deadzone, maxY - deadzone)
         
        
 
@@ -94,6 +96,7 @@ class BallAttack(arcade.Sprite):
         self.angle = self.dir + self.spin
 
         playerHit = arcade.check_for_collision(self, self.Bus.GetVariable("playerSprite"))
+    
 
         if playerHit is True:
             self.Bus.GetFunction("changePlayerLife", -1)
