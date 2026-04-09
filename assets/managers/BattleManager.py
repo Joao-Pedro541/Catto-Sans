@@ -1,5 +1,5 @@
-from GameSupportArcadePython.eventBusScript import EventBus
-from assets.BallWoolAttack import BallAttack
+from assets.managers.eventBusScript import EventBus
+from assets.Attacks.BallWoolAttack import BallAttack
 
 import random
 

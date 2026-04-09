@@ -1,7 +1,7 @@
 import arcade
 
-from GameSupportArcadePython import MathGame
-from GameSupportArcadePython.eventBusScript import EventBus
+from assets.managers import MathGame
+from assets.managers.eventBusScript import EventBus
 
 
 class boxBattle(arcade.Sprite):

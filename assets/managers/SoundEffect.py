@@ -1,4 +1,4 @@
-from GameSupportArcadePython.eventBusScript import EventBus 
+from assets.managers.eventBusScript import EventBus 
 import arcade.sound
 import os
 

@@ -1,4 +1,4 @@
-from GameSupportArcadePython.eventBusScript import EventBus
+from assets.managers.eventBusScript import EventBus
 
 class keys():
     def __init__(self, Bus: EventBus):

@@ -1,7 +1,7 @@
 import arcade
-import GameSupportArcadePython.MathGame as MathGame
+import assets.managers.MathGame as MathGame
 
-from GameSupportArcadePython.eventBusScript import EventBus
+from assets.managers.eventBusScript import EventBus
 
 class cattoSans(arcade.SpriteList):
     def __init__(self, Bus: EventBus, posInitX=0, posInitY=0):

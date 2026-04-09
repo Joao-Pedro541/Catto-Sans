@@ -1,8 +1,8 @@
 import arcade
-import GameSupportArcadePython.MathGame as MathGame
+import assets.managers.MathGame as MathGame
 import random
 
-from GameSupportArcadePython.eventBusScript import EventBus
+from assets.managers.eventBusScript import EventBus
 
     
 class BallAttack(arcade.Sprite):
@@ -53,7 +53,6 @@ class BallAttack(arcade.Sprite):
             
             if deadzone >= MathGame.GetDist(self.center_x,lastPointX):
                 self.dir = 180 - self.dir
-                self.dir += random.randint(-5,5)
                 self.points.append((MathGame.clamp(self.center_x, minX, maxX), MathGame.clamp(self.center_y, minY, maxY)))
 
             if deadzone >= MathGame.GetDist(self.center_y,lastPointY):

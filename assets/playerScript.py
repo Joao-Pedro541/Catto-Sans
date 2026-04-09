@@ -1,7 +1,7 @@
 import arcade
-import GameSupportArcadePython.MathGame as MathGame
+import assets.managers.MathGame as MathGame
 
-from GameSupportArcadePython.eventBusScript import EventBus
+from assets.managers.eventBusScript import EventBus
 
     
 class playerObject():
@@ -9,6 +9,9 @@ class playerObject():
         super().__init__()
         
         self.sprite = arcade.Sprite()
+        self.spriteKnife = arcade.Sprite()
+
+        self.spriteKnife.texture = arcade.load_texture("assets/sprites/Player/Player_Knife.png")
         self.centerMap = (posInitX,posInitY)
         self.sprite.center_x = posInitX
         self.sprite.center_y = posInitY
@@ -48,7 +51,7 @@ class playerObject():
             "Justice": self.JusticeStart
         }
 
-        self.PlayerState = "Bravery"
+        self.PlayerState = "Determination"
         
         self.speed = 175
         self.dir = 0
@@ -74,6 +77,9 @@ class playerObject():
 
         self.life = 40
         self.invicibilyTime = 0.5
+
+        self.spriteKnife.scale = 0.35
+        self.spriteKnife.angle = 45
 
         self.changeStages(self.PlayerState)
 
@@ -107,6 +113,9 @@ class playerObject():
 
         self.sprite.center_x, self.sprite.center_y = self.playerMoviment[self.PlayerState]() if self.PlayerState in self.playerMoviment else (self.sprite.center_x, self.sprite.center_y)
 
+        self.spriteKnife.center_x = self.sprite.center_x + 10
+        self.spriteKnife.center_y = self.sprite.center_y - 10
+
         self.Bus.SetVariable("playerPos", (self.sprite.center_x, self.sprite.center_y))
         self.Bus.SetVariable("playerSprite", self.sprite)
 
@@ -120,6 +129,7 @@ class playerObject():
         self.sprite.texture = self.spritesPlayer[self.PlayerState]
         if layer == 2:
             self.sprite.alpha = MathGame.magnitude(((int(self.blinkTime * 10) % 2) -1 )* 255)
+            arcade.draw_sprite(self.spriteKnife)
             arcade.draw_sprite(self.sprite)
 
         arcade.draw_text(f"Life: {self.life}", 10, 400, arcade.color.WHITE, 14)

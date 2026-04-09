@@ -1,12 +1,12 @@
 
-from GameSupportArcadePython.eventBusScript import EventBus
-from GameSupportArcadePython.keysManage import keys
-from GameSupportArcadePython.SoundEffect import SoundManager
+from assets.managers.eventBusScript import EventBus
+from assets.managers.keysManage import keys
+from assets.managers.SoundEffect import SoundManager
 
 from assets.playerScript import playerObject
 from assets.boxBattleScript import boxBattle
 from assets.CattoSansScript import cattoSans
-from assets.BattleManager import ManagerBattle
+from assets.managers.BattleManager import ManagerBattle
 
 class ObjectsGame():
     def __init__(self,Bus: EventBus):

@@ -1,5 +1,5 @@
 import arcade
-from GameSupportArcadePython.eventBusScript import EventBus
+from assets.managers.eventBusScript import EventBus
 
 class WindowGame(arcade.Window):
 

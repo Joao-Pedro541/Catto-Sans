@@ -1,8 +1,8 @@
 import arcade
 
-from GameSupportArcadePython.eventBusScript import EventBus
-from GameSupportArcadePython.objectsScripts import ObjectsGame
-from GameSupportArcadePython.windowScript import WindowGame
+from assets.managers.eventBusScript import EventBus
+from assets.managers.objectsScripts import ObjectsGame
+from assets.managers.windowScript import WindowGame
 
 def main():
     events = EventBus()
