@@ -17,7 +17,7 @@ class BallAttack(arcade.Sprite):
         self.Bus.SetFunction("onUpdate", self.onUpdate)
         self.Bus.SetFunction("onDraw", self.onDraw)
 
-        self.dir = random.randint(45,135)
+        self.dir = random.randint(45,125)
 
         self.speedAttack = 800
         self.speedReturn = 1600
@@ -53,6 +53,7 @@ class BallAttack(arcade.Sprite):
             
             if deadzone >= MathGame.GetDist(self.center_x,lastPointX):
                 self.dir = 180 - self.dir
+                self.dir += random.randint(-10,10)
                 self.points.append((MathGame.clamp(self.center_x, minX, maxX), MathGame.clamp(self.center_y, minY, maxY)))
 
             if deadzone >= MathGame.GetDist(self.center_y,lastPointY):
