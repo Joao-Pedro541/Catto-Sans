@@ -8,7 +8,7 @@ class playerObject():
     def __init__(self, Bus: EventBus, posInitX=0, posInitY=0):
         super().__init__()
         
-        self.sprite = arcade.Sprite()
+        self.sprite = arcade.Sprite("assets/sprites/Player/Heart_Red.png", scale=0.25)
 
 
         self.centerMap = (posInitX,posInitY)
@@ -55,7 +55,7 @@ class playerObject():
         self.speed = 175
         self.dir = 0
         self.scale = 0.25
-
+        arcade.load_font(f"assets/fonts/determination/determination.ttf")
 
         #System Variables
         self.input = {}
@@ -123,8 +123,8 @@ class playerObject():
         if layer == 2:
             self.sprite.alpha = MathGame.magnitude(((int(self.blinkTime * 10) % 2) -1 )* 255)
             arcade.draw_sprite(self.sprite)
-
-        arcade.draw_text(f"Life: {self.life}", 10, 400, arcade.color.WHITE, 14)
+        
+        arcade.draw_text(self.life,40, 300 , arcade.color.WHITE, 14,font_name="determination")
 
     def changePlayerLife(self, amount, invicibilyTimeMax = 0.5):
         

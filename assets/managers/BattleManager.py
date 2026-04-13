@@ -8,7 +8,7 @@ class ManagerBattle():
         self.Bus = Bus
 
         self.Bus.SetFunction("onUpdate", self.onUpdate)
-        
+
         self.Bus.SetFunction("EndAttack", self.EndAttack)
         self.Bus.SetFunction("StartAttack", self.StartAttack)
 
