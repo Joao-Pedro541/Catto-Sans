@@ -32,8 +32,8 @@ class cattoSans(arcade.SpriteList):
 
         self.dirShake = 1 
 
-    def onUpdate(self):
-        self.deltatime = self.Bus.GetVariable("deltatime") or 0
+    def onUpdate(self,dt):
+        self.deltatime = dt
 
         self.shakeMov(speed=6.5, deadzone=2, amplitude=0.8, frequency=0.5) 
 

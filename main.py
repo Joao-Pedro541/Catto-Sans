@@ -11,7 +11,6 @@ def main():
     window = WindowGame(events,width=640,height=480,title="CattoSans")
     managerObjects.DefineScene("scene0")
     window.on_setup()
-    events.GetFunction("StartAttack")
     window.run()
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ from assets.managers import MathGame
 from assets.managers.eventBusScript import EventBus
 
 
-class boxBattle(arcade.Sprite):
+class boxBattle():
     def __init__(self,Bus: EventBus, pos_x: float, pos_y: float, tam_x: float, tam_y: float):
         super().__init__()
         self.center_x = pos_x
@@ -20,20 +20,20 @@ class boxBattle(arcade.Sprite):
 
         self.color = arcade.color.WHITE
 
-    def onUpdate(self):
+    def onUpdate(self,dt):
         if self.Bus is not None:
             self.Bus.SetVariable("xBoxPos", self.center_x)
             self.Bus.SetVariable("yBoxPos", self.center_y)
             self.Bus.SetVariable("widthBox", self.width)
             self.Bus.SetVariable("heightBox", self.height)
 
-
     def chanceBoxBattle(self, pos_x: float = None, pos_y: float = None, tam_x: float = 260, tam_y: float = 200, color = arcade.color.WHITE):
-
         self.center_x = pos_x if pos_x is not None else self.center_x
         self.center_y = pos_y if pos_y is not None else self.center_y
+
         self.width = tam_x
         self.height = tam_y
+
         self.color = color
 
     def limityWindow(self, posX, posY, deadzone=10):

@@ -26,7 +26,7 @@ class BallAttack(arcade.Sprite):
 
         self.lineColor = arcade.color.GRAY
 
-        self.timeAttack = 10
+        self.timeAttack = 15
         self.spin = 0
 
         self.Bus.GetFunction("chanceBoxBattle",tam_x=400,tam_y=280)
@@ -71,7 +71,7 @@ class BallAttack(arcade.Sprite):
 
             self.dir = int(MathGame.get_angle_degrees(self.center_x, self.center_y,*point))
     
-    def onUpdate(self):
+    def onUpdate(self, dt):
         if self.timeAttack > 0:
             self.limityWindow()
         else:
@@ -79,8 +79,7 @@ class BallAttack(arcade.Sprite):
 
         if self.points == [] and self.timeAttack <= 0:
             self.Bus.GetFunction("EndAttack")
-        
-        dt = self.Bus.GetVariable("deltatime") or 0
+            
         self.timeAttack -= dt
         
         self.speed = self.speedAttack if self.timeAttack > 0 else self.speedReturn

@@ -35,7 +35,7 @@ class WindowGame(arcade.Window):
 
     def on_update(self, delta_time):
         self.camera.position = (320,240)
-        self.Bus.GetFunction("onUpdate")
+        self.Bus.GetFunction("onUpdate",delta_time)
         self.Bus.SetVariable("deltatime", delta_time)
 
     def on_fixed_update(self, delta_time):

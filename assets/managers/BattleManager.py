@@ -1,6 +1,6 @@
 from assets.managers.eventBusScript import EventBus
 from assets.Attacks.BallWoolAttack import BallAttack
-
+from assets.Attacks.CatFollowAttack import CatFollowAttack
 import random
 
 class ManagerBattle():
@@ -12,11 +12,12 @@ class ManagerBattle():
         self.Bus.SetFunction("EndAttack", self.EndAttack)
         self.Bus.SetFunction("StartAttack", self.StartAttack)
 
-        self.Attacks = [[BallAttack,300,600]]
+        self.Attacks = [(CatFollowAttack,300,600),(BallAttack,300,600)]
         self.attack = None
 
         self.cooldownAttack = 0
-        self.timeAttack = 10
+        self.timeAttack = 3
+        print(self.Attacks)
         
 
     def EndAttack(self):
@@ -29,7 +30,10 @@ class ManagerBattle():
 
     def StartAttack(self):
         attack = self.Attacks[random.randint(0,len(self.Attacks)-1)]
+        print(random.randint(0,len(self.Attacks)-1))
         self.attack = attack[0](self.Bus, *attack[1:])
         
-    def onUpdate(self):
-        pass
+    def onUpdate(self,dt):
+        self.cooldownAttack -= dt
+        if self.cooldownAttack <= 0 and self.attack is None:
+            self.StartAttack()

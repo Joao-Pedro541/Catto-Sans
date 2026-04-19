@@ -27,7 +27,7 @@ class keys():
 
 
 
-    def onUpdate(self):
+    def onUpdate(self,dt):
 
         self.Bus.SetVariable("mouseDirX", self.MouseXInWorld)
         self.Bus.SetVariable("mouseDirY", self.MouseYInWorld)

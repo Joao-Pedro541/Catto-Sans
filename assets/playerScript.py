@@ -103,8 +103,8 @@ class playerObject():
             posY = MathGame.clamp(posY, yBoxPos - heightBox/2 + deadzone, yBoxPos + heightBox/2 - deadzone)
         return posX, posY
     
-    def onUpdate(self):
-        self.deltatime = self.Bus.GetVariable("deltatime") or 0
+    def onUpdate(self,dt):
+        self.deltatime = dt
         self.input = self.Bus.GetVariable("inputKeys") or {}
 
         self.sprite.center_x, self.sprite.center_y = self.playerMoviment[self.PlayerState]() if self.PlayerState in self.playerMoviment else (self.sprite.center_x, self.sprite.center_y)
@@ -124,7 +124,7 @@ class playerObject():
             self.sprite.alpha = MathGame.magnitude(((int(self.blinkTime * 10) % 2) -1 )* 255)
             arcade.draw_sprite(self.sprite)
         
-        arcade.draw_text(self.life,40, 300 , arcade.color.WHITE, 14,font_name="determination")
+        arcade.draw_text(f"life: {self.life}", 10, 400 , arcade.color.WHITE, 14,font_name="determination")
 
     def changePlayerLife(self, amount, invicibilyTimeMax = 0.5):
         
@@ -164,11 +164,14 @@ class playerObject():
         return (320,140)
 
     def BraveryMoviment(self):
-        for key,value in self.input.items():     
-            if key is "keyPress": 
-                for i in value:           
-                    self.directionX = self.inputCommands["MoveHorizontal"].get(i, 0) or self.directionX
-                    self.directionY = self.inputCommands["MoveVertical"].get(i, 0) or self.directionY
+        if self.Bus.GetVariable("keyPress", arcade.key.LEFT) or self.Bus.GetVariable("keyPress", arcade.key.A):
+            self.directionX = -1
+        elif self.Bus.GetVariable("keyPress", arcade.key.RIGHT) or self.Bus.GetVariable("keyPress", arcade.key.D):
+            self.directionX = 1
+        if self.Bus.GetVariable("keyPress", arcade.key.UP) or self.Bus.GetVariable("keyPress", arcade.key.W):
+            self.directionY = 1
+        elif self.Bus.GetVariable("keyPress", arcade.key.DOWN) or self.Bus.GetVariable("keyPress", arcade.key.S):
+            self.directionY = -1
         x = self.sprite.center_x + (self.directionX * self.speed) * self.deltatime
         y = self.sprite.center_y + (self.directionY * self.speed) * self.deltatime
 
