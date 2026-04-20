@@ -79,6 +79,9 @@ class playerObject():
 
         self.changeStages(self.PlayerState)
 
+        self.lineActual = 0
+
+        self.timeReloadPerseverence = 0
     def InputMoviment(self):
         X = 0         
         Y = 0       
@@ -92,7 +95,7 @@ class playerObject():
             Y = -1
         return X,Y
     
-    def BoxLimity(self, posX, posY, deadzone=10):
+    def BoxLimity(self, posX = 0, posY = 0, deadzone=10):
         xBoxPos = self.Bus.GetVariable("xBoxPos")
         yBoxPos = self.Bus.GetVariable("yBoxPos")
         widthBox = self.Bus.GetVariable("widthBox")
@@ -111,6 +114,7 @@ class playerObject():
 
         self.Bus.SetVariable("playerPos", (self.sprite.center_x, self.sprite.center_y))
         self.Bus.SetVariable("playerSprite", self.sprite)
+        self.Bus.SetVariable("lifePlayer", self.life)
 
         if self.invicibilyTime > 0: self.invicibilyTime -= self.deltatime
 
@@ -199,7 +203,21 @@ class playerObject():
         return (0, -1)
 
     def PerseveranceMoviment(self):
-        return (1, 1)
+        self.directionX = self.InputMoviment()[0]
+        lines = self.Bus.GetVariable("perseveranceLines") or [self.sprite.center_y]
+        if (self.Bus.GetVariable("keyPress", arcade.key.UP) or self.Bus.GetVariable("keyPress", arcade.key.W)) and self.timeReloadPerseverence <= 0:
+            self.lineActual += 1
+            self.timeReloadPerseverence = 0.25
+        if (self.Bus.GetVariable("keyPress", arcade.key.DOWN) or self.Bus.GetVariable("keyPress", arcade.key.S)) and self.timeReloadPerseverence <= 0:
+            self.lineActual -= 1
+            self.timeReloadPerseverence = 0.25
+
+        self.timeReloadPerseverence -= self.deltatime
+        self.lineActual = MathGame.clamp(self.lineActual,0,len(lines) -1)
+        
+        y = lines[int(self.lineActual)]        
+        y = MathGame.lerp(self.sprite.center_y, y, 10 * self.deltatime)
+        return (self.BoxLimity(self.sprite.center_x + (self.directionX * self.speed) * self.deltatime)[0],y)
 
     def KindnessMoviment(self):
         return (-1, -1)
@@ -229,8 +247,8 @@ class playerObject():
         pass
 
     def PerseveranceStart(self):
-        # No specific start action
-        pass
+        lines = self.Bus.GetVariable("perseveranceLines") or [self.sprite.center_y]
+        self.lineActual = MathGame.ceil(len(lines) -1)/2 
 
     def KindnessStart(self):
         # No specific start action

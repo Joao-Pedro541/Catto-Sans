@@ -28,7 +28,6 @@ class keys():
 
 
     def onUpdate(self,dt):
-
         self.Bus.SetVariable("mouseDirX", self.MouseXInWorld)
         self.Bus.SetVariable("mouseDirY", self.MouseYInWorld)
 
@@ -38,6 +37,7 @@ class keys():
 
         self.keys["keyUp"].clear()
         self.keys["KeyDown"].clear()
+        
         
 
         self.keys["mouseUp"] = False

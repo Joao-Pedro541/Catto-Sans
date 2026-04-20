@@ -1,6 +1,17 @@
 import arcade
 from assets.managers.eventBusScript import EventBus
 
+class GameOver(arcade.View):
+    def __init__(self):
+        super().__init__()
+
+    def on_show(self):
+        arcade.set_background_color(arcade.color.BLACK)
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_text("Game Over", self.width / 2, self.height / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+
 class WindowGame(arcade.Window):
 
     def __init__(self, Bus:EventBus, *args, **kwargs):
@@ -10,7 +21,7 @@ class WindowGame(arcade.Window):
         self.background_color = arcade.color.BLACK
 
         self.Bus = Bus
-        
+        print("WindowGame created")
 
     def on_setup(self):
         self.camera = arcade.Camera2D()
@@ -37,6 +48,9 @@ class WindowGame(arcade.Window):
         self.camera.position = (320,240)
         self.Bus.GetFunction("onUpdate",delta_time)
         self.Bus.SetVariable("deltatime", delta_time)
+
+        if self.Bus.GetVariable("lifePlayer") is not None and self.Bus.GetVariable("lifePlayer") <= 0:
+            self.show_view(GameOver())
 
     def on_fixed_update(self, delta_time):
         self.Bus.GetFunction("fixedUpdate")
