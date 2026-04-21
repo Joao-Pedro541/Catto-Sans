@@ -1,17 +1,6 @@
 import arcade
 from assets.managers.eventBusScript import EventBus
 
-class GameOver(arcade.View):
-    def __init__(self):
-        super().__init__()
-
-    def on_show(self):
-        arcade.set_background_color(arcade.color.BLACK)
-
-    def on_draw(self):
-        self.clear()
-        arcade.draw_text("Game Over", self.width / 2, self.height / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
-
 class WindowGame(arcade.Window):
 
     def __init__(self, Bus:EventBus, *args, **kwargs):
@@ -22,6 +11,7 @@ class WindowGame(arcade.Window):
 
         self.Bus = Bus
         print("WindowGame created")
+        arcade.load_font(f"assets/fonts/determination/determination.ttf")
 
     def on_setup(self):
         self.camera = arcade.Camera2D()
@@ -32,7 +22,7 @@ class WindowGame(arcade.Window):
         self.Bus.SetVariable("camera", self.camera)
 
         #link to music theme in loop: https://youtu.be/BCUelZaQwpk?si=ta2NLFYM-l3Z15FT
-        self.Bus.GetFunction("PlaySoundEffect","theme", volume=0, loop=True)
+        self.Bus.GetFunction("PlaySoundEffect","theme", volume=0.5, loop=True)
 
     def on_draw(self):
         self.clear()
@@ -40,7 +30,10 @@ class WindowGame(arcade.Window):
 
         for i in range(0,8):
             self.Bus.GetFunction("onDraw",i)
-
+        
+        if self.Bus.GetVariable("lifePlayer") is not None and self.Bus.GetVariable("lifePlayer") <= 0:
+            arcade.draw_rect_filled(arcade.rect.XYWH(self.camera.position.x, self.camera.position.y, self.width, self.height), arcade.color.BLACK)
+            arcade.draw_text("Game Over", self.width/2, self.height/2, arcade.color.WHITE, font_size=50, anchor_x="center", anchor_y="center",font_name="determination")
     def on_resize(self, width, height):
         return super().on_resize(width, height)
 
@@ -49,9 +42,8 @@ class WindowGame(arcade.Window):
         self.Bus.GetFunction("onUpdate",delta_time)
         self.Bus.SetVariable("deltatime", delta_time)
 
-        if self.Bus.GetVariable("lifePlayer") is not None and self.Bus.GetVariable("lifePlayer") <= 0:
-            self.show_view(GameOver())
-
+        
+            
     def on_fixed_update(self, delta_time):
         self.Bus.GetFunction("fixedUpdate")
 

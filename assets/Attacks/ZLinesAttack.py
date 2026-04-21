@@ -20,8 +20,11 @@ class ZLinesAttack(arcade.SpriteList):
         self.Zs = arcade.SpriteList()
         self.ZSpeed = 600
         
-        self.timeSpawnZ = 0.5
+        self.timeSpawnZ = 0.75
         self.timeSpawnZCurrent = 0
+        print("ZLinesAttack created")
+
+        self.timeAttack = 20
     
     def onUpdate(self, dt):
         self.Bus.SetVariable("perseveranceLines",self.lines)
@@ -43,6 +46,12 @@ class ZLinesAttack(arcade.SpriteList):
         hitZs = arcade.check_for_collision_with_list(self.Bus.GetVariable("playerSprite"), self.Zs)
         for z in hitZs:
             self.Bus.GetFunction("changePlayerLife", -1)
+
+        self.timeAttack -= dt
+        if self.timeAttack <= 0:
+            self.Bus.GetFunction("EndAttack")
+
+        
     def onDraw(self, layer):
         if layer == 1:
             for line in self.lines:

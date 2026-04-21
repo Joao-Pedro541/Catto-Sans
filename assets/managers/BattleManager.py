@@ -13,7 +13,7 @@ class ManagerBattle():
         self.Bus.SetFunction("EndAttack", self.EndAttack)
         self.Bus.SetFunction("StartAttack", self.StartAttack)
 
-        self.Attacks = [(ZLinesAttack,)]#[(CatFollowAttack,300,600),(BallAttack,300,600),(ZLinesAttack)]
+        self.Attacks = [(ZLinesAttack,),(CatFollowAttack,300,600),(BallAttack,300,600)]
         self.attack = None
 
         self.cooldownAttack = 0
