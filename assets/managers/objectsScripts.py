@@ -19,8 +19,6 @@ class ObjectsGame():
     def DefineScene(self,nameScene = "scene0"):
         self.GameObject = {}
         self.GameObject = self.Scenes.get(nameScene)
-
-        print(self.GameObject)
         if self.GameObject is not None:
             print("Scene Defined: ",nameScene)
             for obj in self.GameObject:

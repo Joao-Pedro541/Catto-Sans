@@ -1,4 +1,5 @@
 import arcade
+import os
 from assets.managers.eventBusScript import EventBus
 
 class WindowGame(arcade.Window):
@@ -23,6 +24,7 @@ class WindowGame(arcade.Window):
 
         #link to music theme in loop: https://youtu.be/BCUelZaQwpk?si=ta2NLFYM-l3Z15FT
         self.Bus.GetFunction("PlaySoundEffect","theme", volume=0.5, loop=True)
+    
 
     def on_draw(self):
         self.clear()
@@ -41,6 +43,9 @@ class WindowGame(arcade.Window):
         self.camera.position = (320,240)
         self.Bus.GetFunction("onUpdate",delta_time)
         self.Bus.SetVariable("deltatime", delta_time)
+        
+        #print(f"FPS: {arcade.get_fps(60):5.1f}")
+
 
         
             

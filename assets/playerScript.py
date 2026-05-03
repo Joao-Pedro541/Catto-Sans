@@ -82,6 +82,8 @@ class playerObject():
         self.lineActual = 0
 
         self.timeReloadPerseverence = 0
+        self.Bus.SetVariable("playerSprite", self.sprite)
+        
     def InputMoviment(self):
         X = 0         
         Y = 0       
@@ -113,7 +115,6 @@ class playerObject():
         self.sprite.center_x, self.sprite.center_y = self.playerMoviment[self.PlayerState]() if self.PlayerState in self.playerMoviment else (self.sprite.center_x, self.sprite.center_y)
 
         self.Bus.SetVariable("playerPos", (self.sprite.center_x, self.sprite.center_y))
-        self.Bus.SetVariable("playerSprite", self.sprite)
         self.Bus.SetVariable("lifePlayer", self.life)
 
         if self.invicibilyTime > 0: self.invicibilyTime -= self.deltatime

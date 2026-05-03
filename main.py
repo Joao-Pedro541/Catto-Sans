@@ -5,6 +5,7 @@ from assets.managers.objectsScripts import ObjectsGame
 from assets.managers.windowScript import WindowGame
 
 def main():
+    #arcade.enable_timings()
     events = EventBus()
     managerObjects = ObjectsGame(events)
 

@@ -17,7 +17,7 @@ class BallAttack(arcade.Sprite):
         self.Bus.SetFunction("onUpdate", self.onUpdate)
         self.Bus.SetFunction("onDraw", self.onDraw)
 
-        self.dir = random.randint(180,360)
+        
 
         self.speedAttack = 800
         self.speedReturn = 1600
@@ -31,6 +31,8 @@ class BallAttack(arcade.Sprite):
 
         self.Bus.GetFunction("chanceBoxBattle",tam_x=400,tam_y=280)
         self.Bus.GetFunction("changeStage")
+        self.points.append((self.center_x, self.center_y))
+        self.dir = random.randint(0,360)
 
     def limityWindow(self, deadzone=10):
         widthWindow = self.Bus.GetVariable("widthBox") or 0
@@ -68,7 +70,6 @@ class BallAttack(arcade.Sprite):
             self.dir = int(MathGame.get_angle_degrees(self.center_x, self.center_y,*point))
     
     def onUpdate(self, dt):
-        print(self.dir)
         if self.timeAttack > 0:
             self.limityWindow()
         else:
@@ -88,10 +89,16 @@ class BallAttack(arcade.Sprite):
         self.spin = self.spin % 360
 
         self.angle = self.dir + self.spin
-
-        if self.Bus.GetVariable("playerSprite") is not None:
-            playerHit = arcade.check_for_collision(self, self.Bus.GetVariable("playerSprite"))
-
+        playerSprite = self.Bus.GetVariable("playerSprite")
+        if playerSprite is not None:
+            playerHit = arcade.check_for_collision(self, playerSprite)
+            for point in range(len(self.points)):
+                if point < len(self.points) - 1:
+                    angleToPoint = MathGame.get_angle_degrees(*self.points[point],*self.points[point + 1])
+                    angleToPlayer = MathGame.get_angle_degrees(*self.points[point],playerSprite.center_x, playerSprite.center_y)
+                    if angleToPlayer >= angleToPoint - 1.5 and angleToPlayer <= angleToPoint + 1.5:
+                        self.Bus.GetFunction("changePlayerLife", -1)
+                        break
             if playerHit is True:
                 self.Bus.GetFunction("changePlayerLife", -1)
         
