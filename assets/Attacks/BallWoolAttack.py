@@ -17,7 +17,7 @@ class BallAttack(arcade.Sprite):
         self.Bus.SetFunction("onUpdate", self.onUpdate)
         self.Bus.SetFunction("onDraw", self.onDraw)
 
-        self.dir = random.randint(45,125)
+        self.dir = random.randint(180,360)
 
         self.speedAttack = 800
         self.speedReturn = 1600
@@ -42,23 +42,19 @@ class BallAttack(arcade.Sprite):
         maxX = PosBoxX + widthWindow/2
         minY = PosBoxY - heightWindow/2
         maxY = PosBoxY + heightWindow/2 
-        
-        playerPos = self.Bus.GetVariable("playerPos")
 
-        if widthWindow is not None and heightWindow is not None and PosBoxX is not None and playerPos is not None:
-            PosBoxX, PosBoxY
-
-            lastPointX,lastPointY = MathGame.GetPointInCircle(self.dir,900,self.center_x,self.center_y)
-            lastPointX,lastPointY = MathGame.clamp(lastPointX,minX,maxX), MathGame.clamp(lastPointY,minY,maxY)
+        lastPointX,lastPointY = MathGame.GetPointInCircle(self.dir,900,self.center_x,self.center_y)
+        lastPointX,lastPointY = MathGame.clamp(lastPointX,minX,maxX), MathGame.clamp(lastPointY,minY,maxY)
             
-            if deadzone >= MathGame.GetDist(self.center_x,lastPointX):
-                self.dir = 180 - self.dir
-                self.dir += random.randint(-10,10)
-                self.points.append((MathGame.clamp(self.center_x, minX, maxX), MathGame.clamp(self.center_y, minY, maxY)))
+        if deadzone >= MathGame.GetDist(MathGame.clamp(self.center_x,minX,maxX),lastPointX):
+            self.dir = 180 - self.dir
+            self.dir += random.randint(-10,10)
+            self.points.append((self.center_x, self.center_y))
 
-            if deadzone >= MathGame.GetDist(self.center_y,lastPointY):
-                self.dir = -self.dir
-                self.points.append((MathGame.clamp(self.center_x, minX, maxX), MathGame.clamp(self.center_y, minY, maxY)))
+        if deadzone >= MathGame.GetDist(MathGame.clamp(self.center_y,minY,maxY),lastPointY):
+            self.dir = -self.dir
+            self.points.append((self.center_x, self.center_y))
+            
         
        
 
@@ -72,6 +68,7 @@ class BallAttack(arcade.Sprite):
             self.dir = int(MathGame.get_angle_degrees(self.center_x, self.center_y,*point))
     
     def onUpdate(self, dt):
+        print(self.dir)
         if self.timeAttack > 0:
             self.limityWindow()
         else:

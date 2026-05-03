@@ -248,7 +248,7 @@ class playerObject():
 
     def PerseveranceStart(self):
         lines = self.Bus.GetVariable("perseveranceLines") or [self.sprite.center_y]
-        self.lineActual = MathGame.ceil(len(lines) -1)/2 
+        self.lineActual = MathGame.floor(len(lines) -1)/2 
 
     def KindnessStart(self):
         # No specific start action
