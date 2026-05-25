@@ -8,7 +8,7 @@ class WindowGame(arcade.Window):
         super().__init__(*args, **kwargs)
 
         self.camera = None
-        self.background_color = arcade.color.BLACK
+        self.background_color = arcade.color.YELLOW
 
         self.Bus = Bus
         print("WindowGame created")

@@ -19,20 +19,23 @@ class BallAttack(arcade.Sprite):
 
         
 
-        self.speedAttack = 800
-        self.speedReturn = 1600
+        self.speedAttack = 500
+        self.speedReturn = 1000
 
         self.points = []
 
         self.lineColor = arcade.color.GRAY
 
-        self.timeAttack = 15
+        self.lineQuantity = 0
+        self.lineMax = 50
+
+        self.lineReturn = False
         self.spin = 0
 
         self.Bus.GetFunction("chanceBoxBattle",tam_x=400,tam_y=280)
         self.Bus.GetFunction("changeStage")
         self.points.append((self.center_x, self.center_y))
-        self.dir = random.randint(0,360)
+        self.dir = random.randint(200,340)
 
     def limityWindow(self, deadzone=10):
         widthWindow = self.Bus.GetVariable("widthBox") or 0
@@ -68,19 +71,30 @@ class BallAttack(arcade.Sprite):
                 return
 
             self.dir = int(MathGame.get_angle_degrees(self.center_x, self.center_y,*point))
-    
-    def onUpdate(self, dt):
-        if self.timeAttack > 0:
-            self.limityWindow()
-        else:
-            self.returnToPoints() 
+    def howMuchLines(self):
+        self.lineQuantity = 0
+        for i in range(len(self.points)-1):
+            if i >= len(self.points) -1:
+                break
+            self.lineQuantity += int(MathGame.get_distance(*self.points[i],*self.points[i+1])//100)
+        self.lineQuantity += int(MathGame.get_distance(self.center_x, self.center_y,*self.points[-1])//100)
 
-        if self.points == [] and self.timeAttack <= 0:
+    def onUpdate(self, dt):
+
+        print(self.lineQuantity)
+        self.howMuchLines()
+        if self.lineQuantity >= self.lineMax:
+                self.lineReturn = True
+    
+        if self.lineReturn:
+            self.returnToPoints()
+        else:
+            self.limityWindow() 
+
+        if self.points == [] and self.lineReturn:
             self.Bus.GetFunction("EndAttack")
-            
-        self.timeAttack -= dt
         
-        self.speed = self.speedAttack if self.timeAttack > 0 else self.speedReturn
+        self.speed = self.speedAttack if not self.lineReturn else self.speedReturn
 
         self.center_x += MathGame.cos(MathGame.radians(self.dir)) * self.speed * dt
         self.center_y -= MathGame.sin(MathGame.radians(self.dir)) * self.speed * dt
